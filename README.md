@@ -8,7 +8,7 @@ Requires `poetry` and `python>=3.8`.
 
 Run `poetry install` to install dependencies.
 Copy the `.env.example` to `.env` for development environments.
-Use `poetry run generate-secret` to generate entropic enough secrets. (see `.env.example`)
+Use `poetry run flask generate-secret` to generate entropic enough secrets. (see `.env.example`)
 Finally, run `poetry run flask run` to run the app.
 
 ## How to set up the database
