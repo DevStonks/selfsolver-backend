@@ -1,9 +1,9 @@
 """Provide utils for hashing and verifying passwords."""
 from passlib.context import CryptContext
-from selfsolver import config
+from selfsolver.config import Configuration
 
 context = CryptContext(schemes=["argon2"])
-pepper = bytes.fromhex(config.PASSWORD_PEPPER)
+pepper = Configuration.PASSWORD_PEPPER
 
 
 def hash(password):

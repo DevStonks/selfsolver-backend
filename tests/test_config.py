@@ -14,10 +14,11 @@ def _config(monkeypatch):
 
 def test_config():
     """Test configuration values are loaded from environment."""
-    from selfsolver import config
+    from selfsolver.config import Configuration
 
     assert (
-        config.SQLALCHEMY_DATABASE_URI == "postgresql://postgres@localhost/selfsolver"
+        Configuration.SQLALCHEMY_DATABASE_URI
+        == "postgresql://postgres@localhost/selfsolver-test"
     )
-    assert config.JWT_SECRET_KEY == SECRET
-    assert config.PASSWORD_PEPPER == SECRET
+    assert Configuration.JWT_SECRET_KEY == bytes.fromhex(SECRET)
+    assert Configuration.PASSWORD_PEPPER == bytes.fromhex(SECRET)
