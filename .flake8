@@ -1,5 +1,5 @@
 [flake8]
-select = B,B9,BLK,C,D,E,F,I,S,W
+select = B,B9,BLK,C,D,E,F,I,N,PT,S,W
 max-complexity = 10
 application-import-names = impressoras,tests
 import-order-style = google
