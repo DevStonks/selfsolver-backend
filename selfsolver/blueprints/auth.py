@@ -1,3 +1,4 @@
+"""Provide routes for user authentication."""
 from flask import abort, Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from selfsolver import password
@@ -8,6 +9,7 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods=["POST"])
 def login():
+    """Check request credentials and return a JWT."""
     if not request.is_json:
         abort(400)
 
