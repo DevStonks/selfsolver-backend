@@ -16,6 +16,8 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 app.config["JWT_SECRET_KEY"] = bytes.fromhex(config.JWT_SECRET_KEY)
 app.config["JWT_AUTH_USERNAME_KEY"] = "email"
+# https://github.com/pallets/flask-sqlalchemy/pull/727
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
 JWTManager(app)

@@ -11,4 +11,4 @@ import click
 @click.command("generate-secret")
 def generate_secret():
     """Generate secure and entropic secret bytes and print as hexstring."""
-    print(secrets.token_hex())
+    click.echo(secrets.token_hex())
