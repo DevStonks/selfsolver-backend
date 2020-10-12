@@ -21,5 +21,5 @@ class TestingConfiguration(BaseConfiguration):
 
 
 Configuration = (
-    TestingConfiguration if os.getenv("ENV") == "testing" else BaseConfiguration
+    TestingConfiguration if "PYTEST_CURRENT_TEST" in os.environ else BaseConfiguration
 )
