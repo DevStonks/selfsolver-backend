@@ -1,6 +1,7 @@
 """Test selfsolver database models."""
 import pytest
 from selfsolver.models import User
+from selfsolver.password import verify
 from sqlalchemy.exc import IntegrityError
 
 
@@ -12,7 +13,7 @@ def test_user_creation(db_session, user_factory):
 
     assert user.id  # can't assert id, depends on test order
     assert user.email == user_factory.email
-    assert user.password == user_factory.password
+    assert verify(user_factory.password, user.password)
 
 
 def test_user_creation_without_email(db_session, user_factory):

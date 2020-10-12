@@ -5,16 +5,15 @@ $ flask create-user test@example.com tijolo22
 """
 import click
 from flask.cli import with_appcontext
-from selfsolver import password
 from selfsolver.models import db, User
 
 
 @click.command("create-user")
 @click.argument("email")
-@click.argument("passwd", metavar="PASSWORD")
+@click.argument("password")
 @with_appcontext
-def create_user(email, passwd):
-    """Create a user with email and password (hashed)."""
-    user = User(email=email, password=password.hash(passwd))
+def create_user(email, password):
+    """Create a user with email and password."""
+    user = User(email=email, password=password)
     db.session.add(user)
     db.session.commit()
