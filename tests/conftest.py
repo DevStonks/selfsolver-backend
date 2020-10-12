@@ -1,6 +1,7 @@
 """Configure pytest globally."""
 import pytest
 from pytest_factoryboy import register
+from selfsolver.models import db
 
 from tests.factories import UserFactory
 
@@ -12,7 +13,6 @@ def _db():  # noqa: PT005
     Also, make sure all tables are created at the beginning of the session
     and destroyed at the end.
     """
-    from selfsolver.models import db
     from selfsolver.app import app
 
     with app.app_context():

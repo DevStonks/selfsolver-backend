@@ -13,4 +13,4 @@ class User(db.Model):
 
     def __repr__(self):
         """Represent a user instance in python shell."""
-        return f"<User {self.email}>"
+        return f"<User id={self.id} email={self.email}>"
