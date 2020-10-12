@@ -6,7 +6,7 @@ import pytest
 def password(monkeypatch):
     """Monkeypatch password module to hardcode password pepper."""
     monkeypatch.setattr(
-        "selfsolver.config.Configuration.PASSWORD_PEPPER",
+        "selfsolver.password.pepper",
         bytes.fromhex(
             "b78dcfe9c98e8342c29ead18e79aff6e42bc0e975261d0966ae74647624498cc"
         ),
