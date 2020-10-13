@@ -21,4 +21,12 @@ def _db():  # noqa: PT005
         db.drop_all()
 
 
+@pytest.fixture()
+def app():
+    """Provide app fixture for pytest-flask own fixtures."""
+    from selfsolver.app import app
+
+    return app
+
+
 register(UserFactory)
