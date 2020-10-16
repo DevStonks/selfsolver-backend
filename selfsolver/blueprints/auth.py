@@ -28,9 +28,6 @@ def login():
 
     email, password = data["email"], data["password"]
 
-    if not email or not password:
-        abort(400)
-
     user = User.query.filter(User.email == email).first()
 
     if not user or not verify(password, user.password):

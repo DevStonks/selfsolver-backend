@@ -4,6 +4,7 @@ Configure the app, initialize all extensions (sqlalchemy and jwt) and register
 selfsolver blueprints and commands.
 """
 from flask import Flask
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from selfsolver.blueprints.auth import auth
 from selfsolver.commands.create_user import create_user
@@ -16,6 +17,7 @@ app.config.from_object("selfsolver.config.Configuration")
 
 db.init_app(app)
 JWTManager(app)
+CORS(app, origins=[app.config["SELFSOLVER_ENDUSER_APP"]])
 
 app.register_blueprint(auth)
 

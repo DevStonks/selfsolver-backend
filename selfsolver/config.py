@@ -11,6 +11,7 @@ class BaseConfiguration:
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     # https://github.com/pallets/flask-sqlalchemy/pull/727
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SELFSOLVER_ENDUSER_APP = os.getenv('SELFSOLVER_ENDUSER_APP')
 
 
 class TestingConfiguration(BaseConfiguration):
