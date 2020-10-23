@@ -79,10 +79,22 @@ def test_database_reset(runner, db_create_all, db_drop_all):
 
 def test_create_user(runner, db_session_add, db_session_commit, mock_user):
     """Test create-user command."""
-    result = runner.invoke(create_user, ["email@nanana.com", "tijolo22"])
+    result = runner.invoke(create_user, ["1", "email@nanana.com", "tijolo22"])
     mock_user.assert_called_once_with(  # noqa: S106
-        email="email@nanana.com",
-        password="tijolo22",
+        email="email@nanana.com", password="tijolo22", company_id=1
+    )
+    db_session_add.assert_called_once_with(mock_user.return_value)
+    db_session_commit.assert_called_once()
+    assert result.exit_code == 0
+
+
+def test_create_user_without_password(
+    runner, db_session_add, db_session_commit, mock_user
+):
+    """Test create-user command."""
+    result = runner.invoke(create_user, ["1", "email@nanana.com"])
+    mock_user.assert_called_once_with(
+        email="email@nanana.com", company_id=1, password=None
     )
     db_session_add.assert_called_once_with(mock_user.return_value)
     db_session_commit.assert_called_once()
