@@ -6,11 +6,12 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
-    """Hold user data from the database."""
+    """Hold end-user info and credentials."""
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(256), unique=True, nullable=False)
     _password = db.Column("password", db.String(128), nullable=True)
+    company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
 
     @property
     def password(self):
@@ -25,3 +26,10 @@ class User(db.Model):
     def __repr__(self):
         """Represent a user instance in python shell."""
         return f"<User id={self.id} email={self.email}>"
+
+
+class Company(db.Model):
+    """Hold client company info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    users = db.relationship("User", cascade="all,delete-orphan", backref="company")

@@ -1,6 +1,6 @@
 """Set up model factories for testing."""
 import factory
-from selfsolver.models import db, User
+from selfsolver.models import Company, db, User
 from sqlalchemy.orm.scoping import scoped_session
 
 TEST_EMAIL = "nanana@nonono.com"
@@ -18,6 +18,13 @@ class FlaskSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
         sqlalchemy_session_persistence = "commit"
 
 
+class CompanyFactory(FlaskSQLAlchemyModelFactory):
+    """Create companies and optionally save them to the database."""
+
+    class Meta:  # noqa: D106
+        model = Company
+
+
 class UserFactory(FlaskSQLAlchemyModelFactory):
     """Create users and optionally save them to the database."""
 
@@ -26,3 +33,4 @@ class UserFactory(FlaskSQLAlchemyModelFactory):
 
     email = TEST_EMAIL
     password = TEST_PASSWORD
+    company = factory.SubFactory(CompanyFactory)
