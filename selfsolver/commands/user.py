@@ -21,3 +21,4 @@ def create_user(company_id, email, password=None):
     user = User(email=email, password=password, company_id=company_id)
     db.session.add(user)
     db.session.commit()
+    click.echo(f"Created user {user}.")

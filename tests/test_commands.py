@@ -30,6 +30,18 @@ def db_drop_all(monkeypatch, mocker):
     return stub
 
 
+@pytest.fixture()
+def fake_password(faker):
+    """Provide fake password value."""
+    return faker.password()
+
+
+@pytest.fixture()
+def fake_email(faker):
+    """Provide fake email value."""
+    return faker.email()
+
+
 def test_generate_secret(runner):
     """Test generate-secret command."""
     result = runner.invoke(generate_secret)
@@ -54,20 +66,21 @@ def test_database_reset(runner, db_create_all, db_drop_all):
 
 
 @pytest.mark.usefixtures("db_session")
-def test_create_user(runner, company):
+def test_create_user(company, runner, fake_email, fake_password):
     """Test create-user command."""
-    result = runner.invoke(
-        create_user, [str(company.id), "email@nanana.com", "tijolo22"]
-    )
+    result = runner.invoke(create_user, [str(company.id), fake_email, fake_password])
     user = User.query.filter_by(company_id=company.id).first()
     assert result.exit_code == 0
-    assert user.id
+    assert result.output.startswith("Created user")
+    assert str(user.id) in result.output
+    assert fake_email in result.output
+    assert fake_password not in result.output
 
 
 @pytest.mark.usefixtures("db_session")
-def test_create_user_without_password(runner, company):
+def test_create_user_without_password(runner, company, fake_email):
     """Test create-user command."""
-    result = runner.invoke(create_user, [str(company.id), "email@nanana.com"])
-    user = User.query.filter_by(company_id=company.id).first()
+    result = runner.invoke(create_user, [str(company.id), fake_email])
+    assert User.query.filter_by(company_id=company.id).first()
     assert result.exit_code == 0
-    assert user.id
+    assert "password" not in result.output
