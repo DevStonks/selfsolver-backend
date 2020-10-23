@@ -4,11 +4,14 @@ Usage:
 $ flask create-user test@example.com tijolo22
 """
 import click
+from flask.cli import AppGroup
 from flask.cli import with_appcontext
 from selfsolver.models import db, User
 
+user_cli = AppGroup("user")
 
-@click.command("create-user")
+
+@user_cli.command("create")
 @click.argument("company_id", type=int)
 @click.argument("email")
 @click.argument("password", required=False)

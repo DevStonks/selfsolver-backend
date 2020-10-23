@@ -1,8 +1,8 @@
 """Test custom flask commands."""
 import pytest
-from selfsolver.commands.create_user import create_user
 from selfsolver.commands.database import create_all, recreate_all
 from selfsolver.commands.secret import generate_secret
+from selfsolver.commands.user import create_user
 from selfsolver.models import User
 
 

@@ -20,8 +20,8 @@ Run `poetry run flask database reset`. _THIS WILL DESTROY ALL APP DATA_.
 ## How to create users
 
 There's no http api for signup (by design).
-Run `poetry run flask create-user {COMPANY_ID} {EMAIL} {PASSWORD}` to create a user with those credentials.
-E.g. `poetry run flask create-user 1 email@example.com correct-horse-battery-staple`.
+Run `poetry run flask user create {COMPANY_ID} {EMAIL} {PASSWORD}` to create a user with those credentials.
+E.g. `poetry run flask user create 1 email@example.com correct-horse-battery-staple`.
 
 ## How to deploy to Heroku
 
