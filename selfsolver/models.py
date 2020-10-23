@@ -21,7 +21,7 @@ class User(db.Model):
     @password.setter
     def password(self, passwd):
         """Hash password and set to user.password."""
-        self._password = hash(passwd)
+        self._password = hash(passwd) if passwd else None
 
     def __repr__(self):
         """Represent a user instance in python shell."""

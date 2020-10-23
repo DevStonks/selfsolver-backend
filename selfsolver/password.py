@@ -13,4 +13,4 @@ def hash(password):
 
 def verify(password, hash):
     """Pepper the password and verify it matches stored hash."""
-    return context.verify(pepper + password.encode("utf-8"), hash)
+    return hash and context.verify(pepper + password.encode("utf-8"), hash)

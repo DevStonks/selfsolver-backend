@@ -27,6 +27,18 @@ def test_user_creation(db_session, company, user_factory):
     assert verify(user_factory.password, user.password)
 
 
+def test_user_creation_without_password(db_session, user_factory, company):
+    """Test user creation does not fail without password."""
+    user = user_factory.build(password=None, company=company)
+    db_session.add(user)
+    db_session.commit()
+
+    assert user.id
+    assert user.email == user_factory.email
+    assert user.company.id == company.id
+    assert user.password is None
+
+
 def test_user_creation_without_email(db_session, user_factory):
     """Test user creation fails without email."""
     user = user_factory.build(email=None)
