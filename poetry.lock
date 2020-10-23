@@ -978,6 +978,17 @@ dev = ["pre-commit", "tox", "pytest-asyncio"]
 pytest = ">=5.0"
 
 [[package]]
+name = "pytest-only"
+version = "1.2.2"
+description = "Use @pytest.mark.only to run a single test"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pytest = ">=2.6"
+
+[[package]]
 name = "pytest-xdist"
 version = "2.1.0"
 description = "pytest xdist plugin for distributed testing and loop-on-failing modes"
@@ -1182,7 +1193,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.0"
 python-versions = "^3.8"
-content-hash = "a8f1f7f92f6855e9a71d8dee031df06a8384ccdc58b3305b48811188c87d29cf"
+content-hash = "28f2ce115621df43d785e3764a0f0be1faf5283eb67a1a66b0425254903471f2"
 
 [metadata.files]
 apipkg = [
@@ -1655,6 +1666,9 @@ pytest-forked = [
 pytest-mock = [
     {file = "pytest-mock-3.3.1.tar.gz", hash = "sha256:a4d6d37329e4a893e77d9ffa89e838dd2b45d5dc099984cf03c703ac8411bb82"},
     {file = "pytest_mock-3.3.1-py3-none-any.whl", hash = "sha256:024e405ad382646318c4281948aadf6fe1135632bea9cc67366ea0c4098ef5f2"},
+]
+pytest-only = [
+    {file = "pytest-only-1.2.2.tar.gz", hash = "sha256:90789b1f6d867f14ad2935f6499f44b66338a92d6d6aa53819203c8411c59ba3"},
 ]
 pytest-xdist = [
     {file = "pytest-xdist-2.1.0.tar.gz", hash = "sha256:82d938f1a24186520e2d9d3a64ef7d9ac7ecdf1a0659e095d18e596b8cbd0672"},
