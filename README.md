@@ -17,6 +17,12 @@ Run `poetry run flask database setup`.
 After any changes to the models, you may need to recreate the tables.
 Run `poetry run flask database reset`. _THIS WILL DESTROY ALL APP DATA_.
 
+## How to create companies
+
+There's no http api to create companies (by design).
+Run `poetry run flask company create` to create a company.
+The id will be mentioned in the command output.
+
 ## How to create users
 
 There's no http api for signup (by design).

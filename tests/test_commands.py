@@ -1,9 +1,10 @@
 """Test custom flask commands."""
 import pytest
+from selfsolver.commands.company import create_company
 from selfsolver.commands.database import create_all, recreate_all
 from selfsolver.commands.secret import generate_secret
 from selfsolver.commands.user import create_user
-from selfsolver.models import User
+from selfsolver.models import Company, User
 
 
 @pytest.fixture()
@@ -67,7 +68,7 @@ def test_database_reset(runner, db_create_all, db_drop_all):
 
 @pytest.mark.usefixtures("db_session")
 def test_create_user(company, runner, fake_email, fake_password):
-    """Test create-user command."""
+    """Test user create command."""
     result = runner.invoke(create_user, [str(company.id), fake_email, fake_password])
     user = User.query.filter_by(company_id=company.id).first()
     assert result.exit_code == 0
@@ -79,7 +80,7 @@ def test_create_user(company, runner, fake_email, fake_password):
 
 @pytest.mark.usefixtures("db_session")
 def test_create_user_without_password(runner, company, fake_email):
-    """Test create-user command works without password."""
+    """Test user create command works without password."""
     result = runner.invoke(create_user, [str(company.id), fake_email])
     assert result.exit_code == 0
     assert User.query.filter_by(company_id=company.id).first()
@@ -88,8 +89,18 @@ def test_create_user_without_password(runner, company, fake_email):
 
 @pytest.mark.usefixtures("db_session")
 def test_create_user_with_non_existing_company(runner, fake_email, fake_password):
-    """Test create-user command fails if no such company exists."""
+    """Test user create command fails if no such company exists."""
     result = runner.invoke(create_user, ["1", fake_email, fake_password])
     assert result.exit_code == 2
     assert "No company found" in result.output
     assert "1" in result.output
+
+
+@pytest.mark.usefixtures("db_session")
+def test_create_company(runner):
+    """Test company create command."""
+    result = runner.invoke(create_company, [])
+    company = Company.query.first()
+    assert result.exit_code == 0
+    assert result.output.startswith("Created company")
+    assert str(company.id) in result.output
