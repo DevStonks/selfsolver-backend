@@ -4,9 +4,10 @@ Usage:
 $ flask create-user test@example.com tijolo22
 """
 import click
-from flask.cli import AppGroup
-from flask.cli import with_appcontext
+from flask.cli import AppGroup, with_appcontext
+from psycopg2.errors import ForeignKeyViolation
 from selfsolver.models import db, User
+from sqlalchemy.exc import IntegrityError
 
 user_cli = AppGroup("user")
 
@@ -20,5 +21,12 @@ def create_user(company_id, email, password=None):
     """Create a user with email and password."""
     user = User(email=email, password=password, company_id=company_id)
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as exception:
+        if isinstance(exception.orig, ForeignKeyViolation):
+            raise click.UsageError(f"No company found with id {company_id}.")
+        else:
+            raise  # pragma: no cover
+
     click.echo(f"Created user {user}.")
