@@ -39,17 +39,19 @@ def test_user_creation_without_password(db_session, user_factory, company):
     assert user.password is None
 
 
-def test_user_creation_without_email(db_session, user_factory):
-    """Test user creation fails without email."""
-    user = user_factory.build(email=None)
+def test_user_creation_with_non_existing_company(db_session, user_factory):
+    """Test user creation fails with non-existing company."""
+    user = User(email=user_factory.email, password=user_factory.password, company_id=1)
     db_session.add(user)
-    with pytest.raises(IntegrityError, match="psycopg2.errors.NotNullViolation"):
+
+    with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
         db_session.commit()
 
 
-def test_user_creation_without_company(db_session, user_factory):
-    """Test user creation fails without company."""
-    user = user_factory.build(company=None)
+@pytest.mark.parametrize("option", ["company", "email"])
+def test_user_creation_without_required(db_session, user_factory, option):
+    """Test user creation fails without required parameters."""
+    user = user_factory.build(**{option: None})
     db_session.add(user)
     with pytest.raises(IntegrityError, match="psycopg2.errors.NotNullViolation"):
         db_session.commit()
