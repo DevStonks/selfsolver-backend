@@ -1,10 +1,11 @@
 """Set up model factories for testing."""
 import factory
-from selfsolver.models import Company, db, User
+from selfsolver.models import Company, db, Location, User
 from sqlalchemy.orm.scoping import scoped_session
 
 TEST_EMAIL = "nanana@nonono.com"
 TEST_PASSWORD = "correct-horse-battery-staple"
+TEST_LABEL = "UNICHAMPZ"
 
 
 class FlaskSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -23,6 +24,16 @@ class CompanyFactory(FlaskSQLAlchemyModelFactory):
 
     class Meta:  # noqa: D106
         model = Company
+
+
+class LocationFactory(FlaskSQLAlchemyModelFactory):
+    """Create location and optionally save them to the database."""
+
+    class Meta:  # noqa: D106
+        model = Location
+
+    label = TEST_LABEL
+    company = factory.SubFactory(CompanyFactory)
 
 
 class UserFactory(FlaskSQLAlchemyModelFactory):

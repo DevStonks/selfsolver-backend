@@ -3,7 +3,7 @@ import pytest
 from pytest_factoryboy import register
 from selfsolver.models import db
 
-from tests.factories import CompanyFactory, UserFactory
+from tests.factories import CompanyFactory, LocationFactory, UserFactory
 
 
 @pytest.fixture(scope="session")
@@ -30,4 +30,5 @@ def app():
 
 
 register(CompanyFactory)
+register(LocationFactory)
 register(UserFactory)

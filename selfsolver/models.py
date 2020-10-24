@@ -33,3 +33,14 @@ class Company(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     users = db.relationship("User", cascade="all,delete-orphan", backref="company")
+    locations = db.relationship(
+        "Location", cascade="all,delete-orphan", backref="company"
+    )
+
+
+class Location(db.Model):
+    """Hold location info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
+    label = db.Column(db.String(64), nullable=False)
