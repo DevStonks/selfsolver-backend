@@ -11,6 +11,11 @@ Copy the `.env.example` to `.env` for development environments.
 Use `poetry run flask generate-secret` to generate entropic enough secrets. (see `.env.example`)
 Finally, run `poetry run flask run` to run the app.
 
+## How to run tests
+
+Run `poetry run pytest --cov` to run all the tests and see a basic coverage report.
+Make sure the `TEST_DATABASE_URL` environment variable is set correctly.
+
 ## How to set up the database
 
 Run `poetry run flask database setup`.
