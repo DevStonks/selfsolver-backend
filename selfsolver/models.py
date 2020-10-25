@@ -51,24 +51,26 @@ class Brand(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
+    models = db.relationship("Model", cascade="all,delete-orphan", backref="brand")
 
 
 class Model(db.Model):
     """Hold model info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    brand_id = db.Column(db.Integer, db.ForeignKey("Brand.id"), nullable=False)
+    brand_id = db.Column(db.Integer, db.ForeignKey("brand.id"), nullable=False)
     name = db.Column(db.String(128), nullable=False)
+    printers = db.relationship("Printer", cascade="all,delete-orphan", backref="model")
 
 
 class Printer(db.Model):
     """Hold printer info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    location_id = db.Column(db.Integer, db.ForeignKey("Location.id"), nullable=False)
-    model_id = db.Column(db.Integer, db.ForeignKey("Model.id"), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
+    model_id = db.Column(db.Integer, db.ForeignKey("model.id"), nullable=False)
     serial_number = db.Column(db.Integer, nullable=False)
-    purchase_date = db.Column(db.Datetime, nullable=False)
+    purchase_date = db.Column(db.DateTime, nullable=False)
 
 
 class Solution(db.Model):
@@ -82,11 +84,11 @@ class Ticket(db.Model):
     """Hold ticket info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    printer_id = db.Column(db.Integer, db.ForeignKey("Printer.id"), nullable=False)
-    solution_id = db.Column(db.Integer, db.ForeignKey("Solution.id"), nullable=False)
-    send_time = db.Column(db.Datetime, nullable=False)
-    forward_time = db.Column(db.Datetime, nullable=True)
-    closed_time = db.Column(db.Datetime, nullable=False)
+    printer_id = db.Column(db.Integer, db.ForeignKey("printer.id"), nullable=False)
+    solution_id = db.Column(db.Integer, db.ForeignKey("solution.id"), nullable=False)
+    send_time = db.Column(db.DateTime, nullable=False)
+    forward_time = db.Column(db.DateTime, nullable=True)
+    closed_time = db.Column(db.DateTime, nullable=False)
 
 
 class Defect(db.Model):
@@ -100,5 +102,5 @@ class Occurrence(db.Model):
     """Hold occurrence info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    ticket_id = db.Column(db.Integer, db.ForeignKey("Ticket.id"), nullable=False)
-    defect_id = db.Column(db.Integer, db.ForeignKey("Ticket.id"), nullable=False)
+    ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"), nullable=False)
+    defect_id = db.Column(db.Integer, db.ForeignKey("ticket.id"), nullable=False)
