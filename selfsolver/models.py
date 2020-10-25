@@ -44,6 +44,9 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
     label = db.Column(db.String(64), nullable=False)
+    printers = db.relationship(
+        "Printer", cascade="all,delete-orphan", backref="location"
+    )
 
 
 class Brand(db.Model):
@@ -71,6 +74,7 @@ class Printer(db.Model):
     model_id = db.Column(db.Integer, db.ForeignKey("model.id"), nullable=False)
     serial_number = db.Column(db.Integer, nullable=False)
     purchase_date = db.Column(db.DateTime, nullable=False)
+    tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="printer")
 
 
 class Solution(db.Model):
