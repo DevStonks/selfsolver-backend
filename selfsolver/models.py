@@ -44,3 +44,61 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
     label = db.Column(db.String(64), nullable=False)
+
+
+class Brand(db.Model):
+    """Hold brand info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128), nullable=False)
+
+
+class Model(db.Model):
+    """Hold model info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    brand_id = db.Column(db.Integer, db.ForeignKey("Brand.id"), nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+
+
+class Printer(db.Model):
+    """Hold printer info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    location_id = db.Column(db.Integer, db.ForeignKey("Location.id"), nullable=False)
+    model_id = db.Column(db.Integer, db.ForeignKey("Model.id"), nullable=False)
+    serial_number = db.Column(db.Integer, nullable=False)
+    purchase_date = db.Column(db.Datetime, nullable=False)
+
+
+class Solution(db.Model):
+    """Hold solution info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(512), nullable=False)
+
+
+class Ticket(db.Model):
+    """Hold ticket info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    printer_id = db.Column(db.Integer, db.ForeignKey("Printer.id"), nullable=False)
+    solution_id = db.Column(db.Integer, db.ForeignKey("Solution.id"), nullable=False)
+    send_time = db.Column(db.Datetime, nullable=False)
+    forward_time = db.Column(db.Datetime, nullable=True)
+    closed_time = db.Column(db.Datetime, nullable=False)
+
+
+class Defect(db.Model):
+    """Hold defect info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(512), nullable=False)
+
+
+class Occurrence(db.Model):
+    """Hold occurrence info."""
+
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey("Ticket.id"), nullable=False)
+    defect_id = db.Column(db.Integer, db.ForeignKey("Ticket.id"), nullable=False)
