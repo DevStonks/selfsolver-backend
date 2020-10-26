@@ -72,8 +72,8 @@ class Printer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
     model_id = db.Column(db.Integer, db.ForeignKey("model.id"), nullable=False)
-    serial_number = db.Column(db.Integer, nullable=False)
-    purchase_date = db.Column(db.DateTime, nullable=False)
+    serial = db.Column(db.Integer, nullable=False)
+    purchased = db.Column(db.DateTime, nullable=False)
     tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="printer")
 
 
@@ -82,6 +82,7 @@ class Solution(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(512), nullable=False)
+    tickets = db.relationship("Ticket", backref="solution")
 
 
 class Ticket(db.Model):
@@ -89,10 +90,11 @@ class Ticket(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     printer_id = db.Column(db.Integer, db.ForeignKey("printer.id"), nullable=False)
-    solution_id = db.Column(db.Integer, db.ForeignKey("solution.id"), nullable=False)
-    send_time = db.Column(db.DateTime, nullable=False)
-    forward_time = db.Column(db.DateTime, nullable=True)
-    closed_time = db.Column(db.DateTime, nullable=False)
+    solution_id = db.Column(db.Integer, db.ForeignKey("solution.id"), nullable=True)
+    created = db.Column(db.DateTime, nullable=False)
+    forwarded = db.Column(db.DateTime, nullable=True)
+    closed = db.Column(db.DateTime, nullable=True)
+    occurrences = db.relationship("Occurence", backref="ticket")
 
 
 class Defect(db.Model):
@@ -100,6 +102,7 @@ class Defect(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(512), nullable=False)
+    occurrences = db.relationship("Occurence", backref="defect")
 
 
 class Occurrence(db.Model):
