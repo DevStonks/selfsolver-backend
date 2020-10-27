@@ -4,10 +4,6 @@ from sqlalchemy.orm.scoping import scoped_session
 
 from selfsolver.models import Company, Location, User, db
 
-TEST_EMAIL = "nanana@nonono.com"
-TEST_PASSWORD = "correct-horse-battery-staple"
-TEST_LABEL = "UNICHAMPZ"
-
 
 class FlaskSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
     """Connects factory meta session to a pytest-flask-sqlalchemy scoped session."""
@@ -33,7 +29,7 @@ class LocationFactory(FlaskSQLAlchemyModelFactory):
     class Meta:  # noqa: D106
         model = Location
 
-    label = TEST_LABEL
+    label = factory.Faker("city")
     company = factory.SubFactory(CompanyFactory)
 
 
@@ -43,6 +39,6 @@ class UserFactory(FlaskSQLAlchemyModelFactory):
     class Meta:  # noqa: D106
         model = User
 
-    email = TEST_EMAIL
-    password = TEST_PASSWORD
+    email = factory.Faker("email")
+    password = factory.Faker("password")
     company = factory.SubFactory(CompanyFactory)

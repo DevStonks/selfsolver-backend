@@ -6,17 +6,27 @@ from selfsolver.models import User
 from selfsolver.password import verify
 
 
-def test_user_creation(db_session, company, user_factory):
+@pytest.fixture()
+def email(user_factory):
+    """Provide a random email fixture."""
+    return user_factory.email.generate({"locale": None})
+
+
+@pytest.fixture()
+def password(user_factory):
+    """Provide a random password fixture."""
+    return user_factory.password.generate({"locale": None})
+
+
+def test_user_creation(db_session, company, email, password):
     """Test user creation."""
-    user = User(
-        email=user_factory.email, password=user_factory.password, company=company
-    )
+    user = User(email=email, password=password, company=company)
     db_session.add(user)
     db_session.commit()
 
     assert user.id
-    assert user.email == user_factory.email
-    assert verify(user_factory.password, user.password)
+    assert user.email == email
+    assert verify(password, user.password)
 
 
 def test_user_creation_without_password(db_session, user_factory, company):
@@ -26,14 +36,13 @@ def test_user_creation_without_password(db_session, user_factory, company):
     db_session.commit()
 
     assert user.id
-    assert user.email == user_factory.email
-    assert user.company.id == company.id
+    assert user.email
     assert user.password is None
 
 
-def test_user_creation_with_non_existing_company(db_session, user_factory):
+def test_user_creation_with_non_existing_company(db_session, email, password):
     """Test user creation fails with non-existing company."""
-    user = User(email=user_factory.email, password=user_factory.password, company_id=1)
+    user = User(email=email, password=password, company_id=1)
     db_session.add(user)
 
     with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):

@@ -17,9 +17,9 @@ def test_login_without_data(client, login_url):
 
 
 @pytest.mark.usefixtures("db_session")
-def test_login_with_missing_data(client, login_url, user_factory):
+def test_login_with_missing_data(client, login_url, user):
     """Ensure a 400 response for no data sent."""
-    res = client.post(login_url, json={"email": user_factory.email})
+    res = client.post(login_url, json={"email": user.email})
     assert res.status_code == 400
 
 
@@ -30,11 +30,13 @@ def test_login_with_non_matching_data(client, login_url, user):
     assert res.status_code == 401
 
 
+@pytest.mark.parametrize("user__password", ["correct-horse-staple-battery"])
 @pytest.mark.usefixtures("db_session")
-def test_login_with_matching_data(client, login_url, user, user_factory):
+def test_login_with_matching_data(client, login_url, user):
     """Ensure a 200 response with authtoken for right credentials."""
     res = client.post(
-        login_url, json={"email": user.email, "password": user_factory.password}
+        login_url,
+        json={"email": user.email, "password": "correct-horse-staple-battery"},
     )
     assert res.status_code == 200
     assert res.content_type == "application/json"
