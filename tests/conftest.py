@@ -1,8 +1,8 @@
 """Configure pytest globally."""
 import pytest
 from pytest_factoryboy import register
-from selfsolver.models import db
 
+from selfsolver.models import db
 from tests.factories import CompanyFactory, LocationFactory, UserFactory
 
 

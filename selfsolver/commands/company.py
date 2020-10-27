@@ -5,6 +5,7 @@ $ flask create-company test@example.com tijolo22
 """
 import click
 from flask.cli import AppGroup, with_appcontext
+
 from selfsolver.models import Company, db
 
 company_cli = AppGroup("company")

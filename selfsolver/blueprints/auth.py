@@ -1,7 +1,8 @@
 """Provide routes for user authentication."""
-from flask import abort, Blueprint, jsonify, request
+from flask import Blueprint, abort, jsonify, request
 from flask_jwt_extended import create_access_token
-from marshmallow import fields, Schema, ValidationError
+from marshmallow import Schema, ValidationError, fields
+
 from selfsolver.models import User
 from selfsolver.password import verify
 

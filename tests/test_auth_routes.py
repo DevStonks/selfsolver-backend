@@ -1,7 +1,7 @@
 """Test the auth blueprint routes."""
+import pytest
 from flask import url_for
 from flask_jwt_extended.utils import decode_token
-import pytest
 
 
 @pytest.fixture()

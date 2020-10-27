@@ -6,6 +6,7 @@ $ flask database reset
 """
 from flask import current_app
 from flask.cli import AppGroup
+
 from selfsolver.models import db
 
 database_cli = AppGroup("database")

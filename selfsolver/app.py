@@ -6,6 +6,7 @@ selfsolver blueprints and commands.
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+
 from selfsolver.blueprints.auth import auth
 from selfsolver.commands.company import company_cli
 from selfsolver.commands.database import database_cli

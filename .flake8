@@ -1,7 +1,7 @@
 [flake8]
 select = B,B9,BLK,C,D,E,F,I,N,PT,S,W
 max-complexity = 10
-application-import-names = impressoras,tests
+application-import-names = selfsolver,tests
 import-order-style = google
 max-line-length = 80
 # E203: whitespace before ':' (conflicts with black)

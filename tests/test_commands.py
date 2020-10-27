@@ -1,5 +1,6 @@
 """Test custom flask commands."""
 import pytest
+
 from selfsolver.commands.company import create_company
 from selfsolver.commands.database import create_all, recreate_all
 from selfsolver.commands.secret import generate_secret

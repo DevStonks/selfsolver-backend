@@ -6,8 +6,9 @@ $ flask create-user test@example.com tijolo22
 import click
 from flask.cli import AppGroup, with_appcontext
 from psycopg2.errors import ForeignKeyViolation
-from selfsolver.models import db, User
 from sqlalchemy.exc import IntegrityError
+
+from selfsolver.models import User, db
 
 user_cli = AppGroup("user")
 

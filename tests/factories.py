@@ -1,7 +1,8 @@
 """Set up model factories for testing."""
 import factory
-from selfsolver.models import Company, db, Location, User
 from sqlalchemy.orm.scoping import scoped_session
+
+from selfsolver.models import Company, Location, User, db
 
 TEST_EMAIL = "nanana@nonono.com"
 TEST_PASSWORD = "correct-horse-battery-staple"

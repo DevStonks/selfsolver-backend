@@ -1,5 +1,6 @@
 """Provide utils for hashing and verifying passwords."""
 from passlib.context import CryptContext
+
 from selfsolver.config import Configuration
 
 context = CryptContext(schemes=["argon2"])

@@ -1,5 +1,6 @@
 """Set up database models for selfsolver app."""
 from flask_sqlalchemy import SQLAlchemy
+
 from selfsolver.password import hash
 
 db = SQLAlchemy()
