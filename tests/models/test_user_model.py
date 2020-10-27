@@ -1,17 +1,9 @@
-"""Test selfsolver database models."""
+"""Test selfsolver user model."""
 import pytest
-from selfsolver.models import Company, Location, User
-from selfsolver.password import verify
 from sqlalchemy.exc import IntegrityError
 
-
-def test_company_creation(db_session):
-    """Test company creation."""
-    company = Company()
-    db_session.add(company)
-    db_session.commit()
-
-    assert company.id
+from selfsolver.models import User
+from selfsolver.password import verify
 
 
 def test_user_creation(db_session, company, user_factory):
@@ -25,16 +17,6 @@ def test_user_creation(db_session, company, user_factory):
     assert user.id
     assert user.email == user_factory.email
     assert verify(user_factory.password, user.password)
-
-
-def test_location_creation(db_session, company, location_factory):
-    """Test user creation."""
-    location = Location(label=location_factory.label, company=company)
-    db_session.add(location)
-    db_session.commit()
-
-    assert location.id
-    assert location.label == location_factory.label
 
 
 def test_user_creation_without_password(db_session, user_factory, company):
@@ -117,11 +99,3 @@ def test_user_delete(db_session, user):
 def test_user_repr(db_session, user):
     """Test user model representation."""
     user.__repr__() == f"<User id={user.id} email=nanana@nonono.com>"
-
-
-def test_company_cascades(db_session, user):
-    """Test users are deleted when company is deleted."""
-    db_session.delete(user.company)
-    db_session.commit()
-
-    assert not db_session.query(User).all()
