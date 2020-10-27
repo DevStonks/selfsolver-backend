@@ -95,7 +95,7 @@ class Ticket(db.Model):
     created = db.Column(db.DateTime, nullable=False)
     forwarded = db.Column(db.DateTime, nullable=True)
     closed = db.Column(db.DateTime, nullable=True)
-    occurrences = db.relationship("Occurence", backref="ticket")
+    occurrences = db.relationship("Occurrence", backref="ticket")
 
 
 class Defect(db.Model):
@@ -103,7 +103,7 @@ class Defect(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(512), nullable=False)
-    occurrences = db.relationship("Occurence", backref="defect")
+    occurrences = db.relationship("Occurrence", backref="defect")
 
 
 class Occurrence(db.Model):
@@ -111,4 +111,4 @@ class Occurrence(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"), nullable=False)
-    defect_id = db.Column(db.Integer, db.ForeignKey("ticket.id"), nullable=False)
+    defect_id = db.Column(db.Integer, db.ForeignKey("defect.id"), nullable=False)
