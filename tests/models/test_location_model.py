@@ -21,10 +21,19 @@ def test_location_creation(db_session, company, label):
     assert location.label == label
 
 
-@pytest.mark.parametrize("option", ["label"])
-def test_location_creation_without_required(db_session, location_factory, option):
-    """Test location creation fails without required parameters."""
-    location = location_factory.build(**{option: None})
+def test_label_creation_with_non_existing_company(db_session, label):
+    """Test user creation fails with non-existing company."""
+    location = Location(label=label, company_id=1)
     db_session.add(location)
-    with pytest.raises(IntegrityError, match="psycopg2.errors.NotNullViolation"):
+
+    with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
+        db_session.commit()
+
+
+def test_location_update_with_non_existing_company(db_session, location):
+    """Test updating location company to non-existing company."""
+    location.company_id = 1
+    db_session.add(location)
+
+    with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
         db_session.commit()
