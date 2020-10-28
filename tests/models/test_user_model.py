@@ -1,32 +1,25 @@
 """Test selfsolver user model."""
 import pytest
-from sqlalchemy.exc import IntegrityError
 
 from selfsolver.models import User
 from selfsolver.password import verify
 
 
 @pytest.fixture()
-def email(user_factory):
-    """Provide a random email fixture."""
-    return user_factory.email.generate({"locale": None})
+def user_stub(user_factory):
+    """Provide a stub user as a fixture."""
+    return user_factory.stub()
 
 
-@pytest.fixture()
-def password(user_factory):
-    """Provide a random password fixture."""
-    return user_factory.password.generate({"locale": None})
-
-
-def test_user_create(db_session, company, email, password):
+def test_user_create(db_session, company, user_stub):
     """Test user creation."""
-    user = User(email=email, password=password, company=company)
+    user = User(email=user_stub.email, password=user_stub.password, company=company)
     db_session.add(user)
     db_session.commit()
 
     assert user.id
-    assert user.email == email
-    assert verify(password, user.password)
+    assert user.email == user_stub.email
+    assert verify(user_stub.password, user.password)
 
 
 def test_user_create_without_password(db_session, user_factory, company):
@@ -40,6 +33,16 @@ def test_user_create_without_password(db_session, user_factory, company):
     assert user.password is None
 
 
+def test_user_update_password(db_session, user, faker):
+    """Test user update changes password."""
+    password = faker.password()
+    user.password = password
+    db_session.add(user)
+    db_session.commit()
+
+    assert verify(password, user.password)
+
+
 def test_user_update_without_password(db_session, user):
     """Test user update removes password."""
     user.password = None
@@ -47,24 +50,6 @@ def test_user_update_without_password(db_session, user):
     db_session.commit()
 
     assert user.password is None
-
-
-def test_user_create_with_non_existing_company(db_session, email, password):
-    """Test user creation fails with non-existing company."""
-    user = User(email=email, password=password, company_id=1)
-    db_session.add(user)
-
-    with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
-        db_session.commit()
-
-
-def test_user_update_with_non_existing_company(db_session, user):
-    """Test updating user company to non-existing company."""
-    user.company_id = 1
-    db_session.add(user)
-
-    with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
-        db_session.commit()
 
 
 @pytest.mark.usefixtures("db_session")

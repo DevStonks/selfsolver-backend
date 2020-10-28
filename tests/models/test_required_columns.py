@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 required_columns = {
     "user": ["company", "email"],
-    "location": ["label"],
+    "location": ["company", "label"],
 }
 
 
