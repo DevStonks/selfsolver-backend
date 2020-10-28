@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 relationships = {
     "user": ["company"],
     "location": ["company"],
+    "family": ["brand"],
 }
 
 

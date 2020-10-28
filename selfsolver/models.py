@@ -55,16 +55,16 @@ class Brand(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
-    models = db.relationship("Model", cascade="all,delete-orphan", backref="brand")
+    families = db.relationship("Family", cascade="all,delete-orphan", backref="brand")
 
 
-class Model(db.Model):
+class Family(db.Model):
     """Hold model info."""
 
     id = db.Column(db.Integer, primary_key=True)
     brand_id = db.Column(db.Integer, db.ForeignKey("brand.id"), nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    printers = db.relationship("Printer", cascade="all,delete-orphan", backref="model")
+    printers = db.relationship("Printer", cascade="all,delete-orphan", backref="family")
 
 
 class Printer(db.Model):
@@ -72,7 +72,7 @@ class Printer(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
-    model_id = db.Column(db.Integer, db.ForeignKey("model.id"), nullable=False)
+    family_id = db.Column(db.Integer, db.ForeignKey("family.id"), nullable=False)
     serial = db.Column(db.Integer, nullable=False)
     purchased = db.Column(db.DateTime, nullable=False)
     tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="printer")
