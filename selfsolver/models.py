@@ -67,7 +67,7 @@ class Device(db.Model):
     """Hold device info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=True)
     family_id = db.Column(db.Integer, db.ForeignKey("family.id"), nullable=False)
     serial = db.Column(db.String(64), nullable=False)
     tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="device")
