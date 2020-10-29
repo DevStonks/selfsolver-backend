@@ -15,6 +15,7 @@ from selfsolver.commands.secret import generate_secret
 from selfsolver.commands.seed import seed
 from selfsolver.commands.user import user_cli
 from selfsolver.models import db
+from selfsolver.schemas import ma
 
 
 def create_app(configuration):
@@ -23,6 +24,7 @@ def create_app(configuration):
     app.config.from_object(configuration)
 
     db.init_app(app)
+    ma.init_app(app)
     JWTManager(app)
     CORS(app, origins=[app.config["SELFSOLVER_ENDUSER_APP"]])
 
