@@ -1,19 +1,19 @@
 """Test password hashing and verifying."""
 import pytest
 
+from selfsolver import password
+
 
 @pytest.fixture()
-def password(monkeypatch):
-    """Monkeypatch password module to hardcode password pepper."""
-    monkeypatch.setattr(
-        "selfsolver.password.pepper",
+def _patch_app_pepper(monkeypatch, app):
+    """Monkeypatch app pepper."""
+    monkeypatch.setitem(
+        app.config,
+        "PASSWORD_PEPPER",
         bytes.fromhex(
             "b78dcfe9c98e8342c29ead18e79aff6e42bc0e975261d0966ae74647624498cc"
         ),
     )
-    from selfsolver import password
-
-    return password
 
 
 @pytest.fixture()
@@ -24,12 +24,15 @@ def precomputed_hash():
     )
 
 
-def test_verify(password, precomputed_hash):
+@pytest.mark.usefixtures("_patch_app_pepper")
+def test_verify(app, precomputed_hash):
     """Ensure hashed password can be verified."""
-    assert password.verify("correct-horse-battery-staple", precomputed_hash)
+    with app.app_context():
+        assert password.verify("correct-horse-battery-staple", precomputed_hash)
 
 
-def test_hash(password):
+def test_hash(app):
     """Ensure password is properly hashed."""
-    hash = password.hash("528491")
-    assert password.verify("528491", hash)
+    with app.app_context():
+        hash = password.hash("528491")
+        assert password.verify("528491", hash)

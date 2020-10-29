@@ -1,30 +1,44 @@
 """Set up configuration from environment variables."""
-import importlib
 
 import pytest
 
-SECRET = "b78dcfe9c98e8342c29ead18e79aff6e42bc0e975261d0966ae74647624498cc"
+from selfsolver.app_factory import create_app
+from selfsolver.config import TestingConfiguration
 
 
-@pytest.fixture(autouse=True)
-def _config(monkeypatch):
+@pytest.fixture()
+def fake_url(faker):
+    """Provide a fake url as a fixture."""
+    return faker.url()
+
+
+@pytest.fixture()
+def fake_hex(faker):
+    """Provide a fake hexstring as a fixture."""
+    return faker.binary(16).hex()
+
+
+@pytest.fixture()
+def fake_db_uri():
+    """Provide a fake database uri as a fixture."""
+    return "postgresql://postgres@localhost/cosmic-horror"
+
+
+@pytest.fixture()
+def _patch_environment(monkeypatch, fake_url, fake_hex, fake_db_uri):
     """Monkeypatch environment variables."""
-    monkeypatch.setenv(
-        "TEST_DATABASE_URL", "postgresql://postgres@localhost/cosmic-horror"
-    )
-    monkeypatch.setenv("JWT_SECRET_KEY", SECRET)
-    monkeypatch.setenv("PASSWORD_PEPPER", SECRET)
+    monkeypatch.setenv("TEST_DATABASE_URL", fake_db_uri)
+    monkeypatch.setenv("JWT_SECRET_KEY", fake_hex)
+    monkeypatch.setenv("PASSWORD_PEPPER", fake_hex)
+    monkeypatch.setenv("SELFSOLVER_ENDUSER_APP", fake_url)
 
 
-def test_config():
+@pytest.mark.usefixtures("_patch_environment")
+def test_config(fake_hex, fake_url, fake_db_uri):
     """Test configuration values are loaded from environment."""
-    import selfsolver.config
+    app = create_app(TestingConfiguration())
 
-    config = importlib.reload(selfsolver.config)
-
-    assert (
-        config.Configuration.SQLALCHEMY_DATABASE_URI
-        == "postgresql://postgres@localhost/cosmic-horror"
-    )
-    assert config.Configuration.JWT_SECRET_KEY == bytes.fromhex(SECRET)
-    assert config.Configuration.PASSWORD_PEPPER == bytes.fromhex(SECRET)
+    assert app.config["SQLALCHEMY_DATABASE_URI"] == fake_db_uri
+    assert app.config["JWT_SECRET_KEY"] == bytes.fromhex(fake_hex)
+    assert app.config["PASSWORD_PEPPER"] == bytes.fromhex(fake_hex)
+    assert app.config["SELFSOLVER_ENDUSER_APP"] == fake_url
