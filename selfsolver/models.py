@@ -1,4 +1,6 @@
 """Set up database models for selfsolver app."""
+import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 
 from selfsolver.password import hash
@@ -45,9 +47,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_id = db.Column(db.Integer, db.ForeignKey("company.id"), nullable=False)
     label = db.Column(db.String(64), nullable=False)
-    printers = db.relationship(
-        "Printer", cascade="all,delete-orphan", backref="location"
-    )
+    devices = db.relationship("Device", cascade="all,delete-orphan", backref="location")
 
 
 class Brand(db.Model):
@@ -64,18 +64,17 @@ class Family(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     brand_id = db.Column(db.Integer, db.ForeignKey("brand.id"), nullable=False)
     name = db.Column(db.String(128), nullable=False)
-    printers = db.relationship("Printer", cascade="all,delete-orphan", backref="family")
+    devices = db.relationship("Device", cascade="all,delete-orphan", backref="family")
 
 
-class Printer(db.Model):
-    """Hold printer info."""
+class Device(db.Model):
+    """Hold device info."""
 
     id = db.Column(db.Integer, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
     family_id = db.Column(db.Integer, db.ForeignKey("family.id"), nullable=False)
-    serial = db.Column(db.Integer, nullable=False)
-    purchased = db.Column(db.DateTime, nullable=False)
-    tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="printer")
+    serial = db.Column(db.String(64), nullable=False)
+    tickets = db.relationship("Ticket", cascade="all,delete-orphan", backref="device")
 
 
 class Solution(db.Model):
@@ -90,9 +89,9 @@ class Ticket(db.Model):
     """Hold ticket info."""
 
     id = db.Column(db.Integer, primary_key=True)
-    printer_id = db.Column(db.Integer, db.ForeignKey("printer.id"), nullable=False)
+    device_id = db.Column(db.Integer, db.ForeignKey("device.id"), nullable=False)
     solution_id = db.Column(db.Integer, db.ForeignKey("solution.id"), nullable=True)
-    created = db.Column(db.DateTime, nullable=False)
+    created = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow)
     forwarded = db.Column(db.DateTime, nullable=True)
     closed = db.Column(db.DateTime, nullable=True)
     occurrences = db.relationship("Occurrence", backref="ticket")
