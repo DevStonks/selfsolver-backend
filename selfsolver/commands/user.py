@@ -30,4 +30,4 @@ def create_user(company_id, email, password=None):
         else:
             raise  # pragma: no cover
 
-    click.echo(f"Created user {user}.")
+    click.echo(f"Created user {user.id}.")

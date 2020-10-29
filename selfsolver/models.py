@@ -26,10 +26,6 @@ class User(db.Model):
         """Hash password and set to user.password."""
         self._password = hash(passwd) if passwd else None
 
-    def __repr__(self):
-        """Represent a user instance in python shell."""
-        return f"<User id={self.id} email={self.email}>"
-
 
 class Company(db.Model):
     """Hold client company info."""

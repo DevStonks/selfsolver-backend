@@ -50,9 +50,3 @@ def test_user_update_without_password(db_session, user):
     db_session.commit()
 
     assert user.password is None
-
-
-@pytest.mark.usefixtures("db_session")
-def test_user_repr(user):
-    """Test user model representation."""
-    user.__repr__() == f"<User id={user.id} email=nanana@nonono.com>"

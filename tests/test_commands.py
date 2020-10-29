@@ -76,8 +76,6 @@ def test_create_user(company, runner, fake_email, fake_password):
     assert result.exit_code == 0
     assert result.output.startswith("Created user")
     assert str(user.id) in result.output
-    assert fake_email in result.output
-    assert fake_password not in result.output
 
 
 @pytest.mark.usefixtures("db_session")
@@ -86,7 +84,6 @@ def test_create_user_without_password(runner, company, fake_email):
     result = runner.invoke(create_user, [str(company.id), fake_email])
     assert result.exit_code == 0
     assert User.query.filter_by(company_id=company.id).first()
-    assert "password" not in result.output
 
 
 @pytest.mark.usefixtures("db_session")
