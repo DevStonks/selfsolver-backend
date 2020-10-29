@@ -1,11 +1,20 @@
 """Set up database models for selfsolver app."""
 import datetime
 
+from dictalchemy import DictableModel
 from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy.model import Model
 
 from selfsolver.password import hash
 
-db = SQLAlchemy()
+
+class SelfsolverModel(Model, DictableModel):
+    """Define super-powered base model for SQL alchemy."""
+
+    pass
+
+
+db = SQLAlchemy(model_class=SelfsolverModel)
 
 
 class User(db.Model):

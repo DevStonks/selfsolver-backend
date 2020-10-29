@@ -9,6 +9,7 @@ required_columns = {
     "location": ["company", "label"],
     "brand": ["name"],
     "family": ["brand", "name"],
+    "device": ["family", "serial"],
 }
 
 

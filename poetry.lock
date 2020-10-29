@@ -161,6 +161,23 @@ optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*"
 
 [[package]]
+name = "dictalchemy"
+version = "0.1.2.7"
+description = ""
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+SQLAlchemy = ">=0.9.4"
+
+[package.source]
+type = "git"
+url = "https://github.com/simontegelid/dictalchemy"
+reference = "master"
+resolved_reference = "13f4b8fbdd03b87554fd91f6fc1d136b22b43403"
+
+[[package]]
 name = "distlib"
 version = "0.3.1"
 description = "Distribution utilities"
@@ -1224,7 +1241,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "71866f01b5ccb1092d0a79402e550be1aa294a9150ff201c02be106dc4ef918e"
+content-hash = "fde28ed9bafe96b1dc46375b9d3531909cf0e0954e9bd78f4096c8a154991452"
 
 [metadata.files]
 apipkg = [
@@ -1366,6 +1383,7 @@ decorator = [
     {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
     {file = "decorator-4.4.2.tar.gz", hash = "sha256:e3a62f0520172440ca0dcc823749319382e377f37f140a0b99ef45fecb84bfe7"},
 ]
+dictalchemy = []
 distlib = [
     {file = "distlib-0.3.1-py2.py3-none-any.whl", hash = "sha256:8c09de2c67b3e7deef7184574fc060ab8a793e7adbb183d942c389c8b13c52fb"},
     {file = "distlib-0.3.1.zip", hash = "sha256:edf6116872c863e1aa9d5bb7cb5e05a022c519a4594dc703843343a9ddd9bff1"},

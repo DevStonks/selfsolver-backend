@@ -1,4 +1,4 @@
-"""Test model required columns in a DRY fashion."""
+"""Test model for valid relationships in a DRY fashion."""
 from itertools import chain, product
 
 import pytest
@@ -8,6 +8,7 @@ relationships = {
     "user": ["company"],
     "location": ["company"],
     "family": ["brand"],
+    "device": ["location", "family"],
 }
 
 
@@ -18,12 +19,17 @@ relationships = {
         for model, relations in relationships.items()
     ),
 )
-def test_user_create_with_non_existing_company(db_session, factory, relationship):
-    """Test user creation fails with non-existing company."""
-    data = factory.stub()
-    delattr(data, relationship)
+def test_model_create_with_non_existing_relationship(db_session, factory, relationship):
+    """Test model creation fails with non-existing company."""
     model_class = factory._meta.get_model_class()
-    model = model_class(**data.__dict__, **{f"{relationship}_id": 1337})
+    relationships = [
+        rel.key
+        for rel in model_class.__mapper__.relationships
+        if rel.key != relationship
+    ]
+    data = factory.build().asdict(exclude_pk=True, include=relationships)
+    data[f"{relationship}_id"] = 1337
+    model = model_class(**data)
     db_session.add(model)
 
     with pytest.raises(IntegrityError, match="psycopg2.errors.ForeignKeyViolation"):
