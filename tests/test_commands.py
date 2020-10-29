@@ -4,8 +4,9 @@ import pytest
 from selfsolver.commands.company import create_company
 from selfsolver.commands.database import create_all, recreate_all
 from selfsolver.commands.secret import generate_secret
+from selfsolver.commands.seed import seed
 from selfsolver.commands.user import create_user
-from selfsolver.models import Company, User
+from selfsolver.models import Brand, Company, Device, Family, Location, Ticket, User
 
 
 @pytest.fixture()
@@ -105,3 +106,47 @@ def test_create_company(runner):
     assert result.exit_code == 0
     assert result.output.startswith("Created company")
     assert str(company.id) in result.output
+
+
+@pytest.mark.usefixtures("db_session")
+def test_seed_database(runner):
+    """Test seed staging command."""
+    result = runner.invoke(seed, [])
+
+    assert (company := Company.query.first())
+
+    assert User.query.filter(User.company == company).first()
+    assert (location := Location.query.filter(Location.company == company).first())
+    assert (brand := Brand.query.first())
+    assert (family := Family.query.filter(Family.brand == brand).first())
+    assert (
+        device := Device.query.filter(
+            Device.location == location, Device.family == family
+        ).first()
+    )
+    assert Ticket.query.filter(Ticket.device == device).first()
+
+    assert result.exit_code == 0
+    assert result.output.startswith("Created user")
+    assert "password" in result.output
+
+
+@pytest.mark.usefixtures("db_session")
+def test_seed_database_with_company(runner, company):
+    """Test seed staging command."""
+    result = runner.invoke(seed, [str(company.id)])
+
+    assert User.query.filter(User.company == company).first()
+    assert (location := Location.query.filter(Location.company == company).first())
+    assert (brand := Brand.query.first())
+    assert (family := Family.query.filter(Family.brand == brand).first())
+    assert (
+        device := Device.query.filter(
+            Device.location == location, Device.family == family
+        ).first()
+    )
+    assert Ticket.query.filter(Ticket.device == device).first()
+
+    assert result.exit_code == 0
+    assert result.output.startswith("Created user")
+    assert "password" in result.output

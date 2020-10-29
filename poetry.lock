@@ -201,7 +201,7 @@ doc = ["sphinx", "sphinx-rtd-theme"]
 name = "faker"
 version = "4.14.0"
 description = "Faker is a Python package that generates fake data for you."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.5"
 
@@ -1027,7 +1027,7 @@ testing = ["filelock"]
 name = "python-dateutil"
 version = "2.8.1"
 description = "Extensions to the standard Python datetime module"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 
@@ -1133,7 +1133,7 @@ test = ["pytest (>=3.6)", "pytest-cov", "pytest-django", "zope.component", "sybi
 name = "text-unidecode"
 version = "1.3"
 description = "The most basic Text::Unidecode port"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -1224,7 +1224,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "8b9ad2577d6db16b07e13420b0e6ba4c561b6fd728ae02d821e72fbb19f1413a"
+content-hash = "71866f01b5ccb1092d0a79402e550be1aa294a9150ff201c02be106dc4ef918e"
 
 [metadata.files]
 apipkg = [
