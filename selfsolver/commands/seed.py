@@ -33,4 +33,6 @@ def seed(company_id=None):
     db.session.add_all([user, location, brand, family, device, ticket])
     db.session.commit()
 
-    click.echo(f"Created user {user} with password {password}.")
+    click.echo(
+        f'Created user {user} with credentials email={email} password="{password}"'
+    )
