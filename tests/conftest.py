@@ -6,6 +6,7 @@ from selfsolver.models import db
 from tests.factories import (
     BrandFactory,
     CompanyFactory,
+    DeviceFactory,
     FamilyFactory,
     LocationFactory,
     UserFactory,
@@ -35,8 +36,9 @@ def app():
     return app
 
 
+register(BrandFactory)
 register(CompanyFactory)
+register(DeviceFactory)
+register(FamilyFactory)
 register(LocationFactory)
 register(UserFactory)
-register(BrandFactory)
-register(FamilyFactory)

@@ -2,7 +2,7 @@
 import factory
 from sqlalchemy.orm.scoping import scoped_session
 
-from selfsolver.models import Brand, Company, Family, Location, User, db
+from selfsolver.models import Brand, Company, Device, Family, Location, User, db
 
 
 class FlaskSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -61,3 +61,14 @@ class FamilyFactory(FlaskSQLAlchemyModelFactory):
 
     name = factory.Faker("color_name")
     brand = factory.SubFactory(BrandFactory)
+
+
+class DeviceFactory(FlaskSQLAlchemyModelFactory):
+    """Create family and optionally save them to the database."""
+
+    class Meta:  # noqa: D106
+        model = Device
+
+    location = factory.SubFactory(LocationFactory)
+    family = factory.SubFactory(FamilyFactory)
+    serial = factory.Faker("ean")
