@@ -2,7 +2,7 @@
 import factory
 from sqlalchemy.orm.scoping import scoped_session
 
-from selfsolver.models import Brand, Company, Device, Family, Location, User, db
+from selfsolver.models import Brand, Company, Device, Family, Location, Ticket, User, db
 
 
 class FlaskSQLAlchemyModelFactory(factory.alchemy.SQLAlchemyModelFactory):
@@ -64,7 +64,7 @@ class FamilyFactory(FlaskSQLAlchemyModelFactory):
 
 
 class DeviceFactory(FlaskSQLAlchemyModelFactory):
-    """Create family and optionally save them to the database."""
+    """Create device and optionally save them to the database."""
 
     class Meta:  # noqa: D106
         model = Device
@@ -72,3 +72,15 @@ class DeviceFactory(FlaskSQLAlchemyModelFactory):
     location = factory.SubFactory(LocationFactory)
     family = factory.SubFactory(FamilyFactory)
     serial = factory.Faker("ean")
+
+
+class TicketFactory(FlaskSQLAlchemyModelFactory):
+    """Create ticket and optionally save them to the database."""
+
+    class Meta:  # noqa: D106
+        model = Ticket
+
+    device = factory.SubFactory(DeviceFactory)
+    created = None
+    forwarded = None
+    closed = None

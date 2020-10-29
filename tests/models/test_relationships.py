@@ -9,6 +9,7 @@ relationships = {
     "location": ["company"],
     "family": ["brand"],
     "device": ["location", "family"],
+    "ticket": ["device"],
 }
 
 

@@ -10,6 +10,7 @@ required_columns = {
     "brand": ["name"],
     "family": ["brand", "name"],
     "device": ["family", "serial"],
+    "ticket": ["device"],
 }
 
 

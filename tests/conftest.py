@@ -9,6 +9,7 @@ from tests.factories import (
     DeviceFactory,
     FamilyFactory,
     LocationFactory,
+    TicketFactory,
     UserFactory,
 )
 
@@ -41,4 +42,5 @@ register(CompanyFactory)
 register(DeviceFactory)
 register(FamilyFactory)
 register(LocationFactory)
+register(TicketFactory)
 register(UserFactory)
