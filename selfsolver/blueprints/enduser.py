@@ -1,5 +1,5 @@
 """Provide routes for enduser app."""
-from flask import Blueprint, jsonify
+from flask import Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
 from selfsolver.models import Company, Device, Location, Ticket, User
@@ -17,6 +17,4 @@ def tickets():
         User.id == current_user, Ticket.closed.is_(None)
     )
 
-    schema = TicketSchema(many=True)
-
-    return jsonify(tickets=schema.dump(tickets))
+    return TicketSchema(many=True).jsonify(tickets)
