@@ -2,8 +2,8 @@
 from flask import Blueprint
 from flask_jwt_extended import get_jwt_identity, jwt_required
 
-from selfsolver.models import Company, Device, Location, Ticket, User
-from selfsolver.schemas import DeviceSchema, TicketSchema
+from selfsolver.models import Company, Defect, Device, Location, Ticket, User
+from selfsolver.schemas import DefectSchema, DeviceSchema, TicketSchema
 
 enduser = Blueprint("enduser", __name__)
 
@@ -28,3 +28,12 @@ def devices():
     devices = Device.query.join(Location, Company, User).filter(User.id == current_user)
 
     return DeviceSchema(many=True).jsonify(devices)
+
+
+@enduser.route("/defects", methods=["GET"])
+@jwt_required
+def defects():
+    """Return the list of tickets for current user's company."""
+    defects = Defect.query.all()
+
+    return DefectSchema(many=True).jsonify(defects)

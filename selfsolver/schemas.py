@@ -1,7 +1,7 @@
 """Provide schemas to dump selfsolver models to JSON."""
 from flask_marshmallow import Marshmallow
 
-from selfsolver.models import Brand, Device, Family, Location, Ticket
+from selfsolver.models import Brand, Defect, Device, Family, Location, Ticket
 
 ma = Marshmallow()
 
@@ -51,3 +51,11 @@ class TicketSchema(ma.SQLAlchemyAutoSchema):
         include_fk = True
 
     device = ma.Nested(DeviceSchema)
+
+
+class DefectSchema(ma.SQLAlchemyAutoSchema):
+    """Provide schema to dump Defect models to JSON."""
+
+    class Meta:  # noqa: D106
+        model = Defect
+        include_fk = True
