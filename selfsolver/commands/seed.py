@@ -7,7 +7,17 @@ import click
 from faker import Faker
 from flask.cli import with_appcontext
 
-from selfsolver.models import Brand, Company, Device, Family, Location, Ticket, User, db
+from selfsolver.models import (
+    Brand,
+    Company,
+    Defect,
+    Device,
+    Family,
+    Location,
+    Ticket,
+    User,
+    db,
+)
 
 
 @click.command("seed")
@@ -30,7 +40,13 @@ def seed(company_id=None):
     device = Device(serial=faker.ean(), family=family, location=location)
     ticket = Ticket(device=device)
 
-    db.session.add_all([user, location, brand, family, device, ticket])
+    defects = [
+        Defect(description="O aparelho não liga."),
+        Defect(description="O aparelho não conecta à rede."),
+        Defect(description="O aparelho exibe uma mensagem de erro."),
+    ]
+
+    db.session.add_all([user, location, brand, family, device, ticket] + defects)
     db.session.commit()
 
     click.echo(

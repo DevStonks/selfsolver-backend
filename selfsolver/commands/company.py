@@ -1,7 +1,7 @@
 """Provide a command for easy company creation.
 
 Usage:
-$ flask create-company test@example.com tijolo22
+$ flask company create
 """
 import click
 from flask.cli import AppGroup, with_appcontext

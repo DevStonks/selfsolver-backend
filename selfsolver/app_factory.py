@@ -11,6 +11,7 @@ from selfsolver.blueprints.auth import auth
 from selfsolver.blueprints.enduser import enduser
 from selfsolver.commands.company import company_cli
 from selfsolver.commands.database import database_cli
+from selfsolver.commands.defect import defect_cli
 from selfsolver.commands.secret import generate_secret
 from selfsolver.commands.seed import seed
 from selfsolver.commands.user import user_cli
@@ -35,6 +36,7 @@ def create_app(configuration):
     app.cli.add_command(database_cli)
     app.cli.add_command(company_cli)
     app.cli.add_command(user_cli)
+    app.cli.add_command(defect_cli)
     app.cli.add_command(seed)
 
     return app
