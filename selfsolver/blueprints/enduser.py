@@ -9,11 +9,12 @@ from selfsolver.models import (
     Device,
     Location,
     Occurrence,
+    Solution,
     Ticket,
     User,
     db,
 )
-from selfsolver.schemas import DefectSchema, DeviceSchema, TicketSchema
+from selfsolver.schemas import DefectSchema, DeviceSchema, SolutionSchema, TicketSchema
 
 enduser = Blueprint("enduser", __name__)
 
@@ -33,7 +34,7 @@ def tickets():
 @enduser.route("/devices", methods=["GET"])
 @jwt_required
 def devices():
-    """Return the list of tickets for current user's company."""
+    """Return the list of devices for current user's company."""
     current_user = get_jwt_identity()
     devices = Device.query.join(Location, Company, User).filter(User.id == current_user)
 
@@ -43,7 +44,7 @@ def devices():
 @enduser.route("/defects", methods=["GET"])
 @jwt_required
 def defects():
-    """Return the list of tickets for current user's company."""
+    """Return the list of known defects."""
     defects = Defect.query.all()
 
     return DefectSchema(many=True).jsonify(defects)
@@ -59,7 +60,7 @@ class NewTicketSchema(Schema):
 @enduser.route("/tickets", methods=["POST"])
 @jwt_required
 def create_ticket():
-    """Return the list of tickets for current user's company."""
+    """Create a ticket for a specific device."""
     current_user = get_jwt_identity()
 
     try:
@@ -85,3 +86,11 @@ def create_ticket():
     db.session.commit()
 
     return TicketSchema().jsonify(ticket)
+
+
+@enduser.route("/tickets/<int:ticket_id>/solutions", methods=["GET"])
+@jwt_required
+def solutions_for_ticket(ticket_id):
+    """Create a ticket for a specific device."""
+    solutions = Solution.query.all()
+    return SolutionSchema(many=True).jsonify(solutions)
