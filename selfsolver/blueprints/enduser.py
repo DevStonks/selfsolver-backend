@@ -1,8 +1,18 @@
 """Provide routes for enduser app."""
-from flask import Blueprint
+from flask import Blueprint, abort, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from marshmallow import Schema, ValidationError, fields
 
-from selfsolver.models import Company, Defect, Device, Location, Ticket, User
+from selfsolver.models import (
+    Company,
+    Defect,
+    Device,
+    Location,
+    Occurrence,
+    Ticket,
+    User,
+    db,
+)
 from selfsolver.schemas import DefectSchema, DeviceSchema, TicketSchema
 
 enduser = Blueprint("enduser", __name__)
@@ -37,3 +47,41 @@ def defects():
     defects = Defect.query.all()
 
     return DefectSchema(many=True).jsonify(defects)
+
+
+class NewTicketSchema(Schema):
+    """Schema for ticket POST request data."""
+
+    defect = fields.Integer(required=True)
+    device = fields.Integer(required=True)
+
+
+@enduser.route("/tickets", methods=["POST"])
+@jwt_required
+def create_ticket():
+    """Return the list of tickets for current user's company."""
+    current_user = get_jwt_identity()
+
+    try:
+        data = NewTicketSchema().load(request.json)
+    except ValidationError:
+        print("valerr")
+        abort(400)
+
+    defect = Defect.query.filter(Defect.id == data["defect"]).first()
+    device = (
+        Device.query.join(Location, Company, User)
+        .filter(User.id == current_user, Device.id == data["device"])
+        .first()
+    )
+
+    if not (defect and device):
+        abort(400)
+
+    ticket = Ticket(device=device)
+    occurrence = Occurrence(ticket=ticket, defect=defect)
+
+    db.session.add(occurrence)
+    db.session.commit()
+
+    return TicketSchema().jsonify(ticket)
