@@ -1,4 +1,6 @@
 """Provide routes for enduser app."""
+from datetime import datetime
+
 from flask import Blueprint, abort, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from marshmallow import Schema, ValidationError, fields
@@ -66,7 +68,6 @@ def create_ticket():
     try:
         data = NewTicketSchema().load(request.json)
     except ValidationError:
-        print("valerr")
         abort(400)
 
     defect = Defect.query.filter(Defect.id == data["defect"]).first()
@@ -94,3 +95,40 @@ def solutions_for_ticket(ticket_id):
     """Create a ticket for a specific device."""
     solutions = Solution.query.all()
     return SolutionSchema(many=True).jsonify(solutions)
+
+
+class TicketSolvedSchema(Schema):
+    """Schema for ticket POST request data."""
+
+    solution = fields.Integer(required=True)
+
+
+@enduser.route("/tickets/<int:ticket_id>", methods=["PUT"])
+@jwt_required
+def close_ticket(ticket_id):
+    """Create a ticket for a specific device."""
+    current_user = get_jwt_identity()
+
+    try:
+        data = TicketSolvedSchema().load(request.json)
+    except ValidationError:
+        abort(400)
+
+    if not Ticket.query.get(ticket_id):
+        abort(404)
+
+    ticket = (
+        Ticket.query.join(Device, Location, Company, User)
+        .filter(User.id == current_user, Ticket.id == ticket_id)
+        .first()
+    )
+
+    if not ticket:
+        abort(403)
+
+    ticket.solution_id = data["solution"]
+    ticket.closed = datetime.now()
+    db.session.add(ticket)
+    db.session.commit()
+
+    return TicketSchema().jsonify(ticket)
