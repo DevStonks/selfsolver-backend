@@ -106,7 +106,8 @@ def solutions_for_ticket(ticket_id):
 class TicketSolvedSchema(Schema):
     """Schema for ticket POST request data."""
 
-    solution = fields.Integer(required=True)
+    solution = fields.Integer(required=False)
+    forwarded = fields.Boolean(required=False)
 
 
 @enduser.route("/tickets/<int:ticket_id>", methods=["PUT"])
@@ -120,10 +121,17 @@ def close_ticket(ticket_id):
     except ValidationError:
         abort(400)
 
+    solution = data.get("solution", None)
+    forwarded = data.get("forwarded", None)
+
+    # one is required
+    if not (solution or forwarded):
+        abort(400)
+
     if not Ticket.query.get(ticket_id):
         abort(404)
 
-    if not Solution.query.get(data["solution"]):
+    if solution and not Solution.query.get(solution):
         abort(404)
 
     ticket = (
@@ -135,8 +143,13 @@ def close_ticket(ticket_id):
     if not ticket:
         abort(403)
 
-    ticket.solution_id = data["solution"]
-    ticket.closed = datetime.now()
+    if solution:
+        ticket.solution_id = solution
+        ticket.closed = datetime.now()
+
+    elif forwarded:
+        ticket.forwarded = datetime.now()
+
     db.session.add(ticket)
     db.session.commit()
 
