@@ -70,15 +70,20 @@ def create_ticket():
     except ValidationError:
         abort(400)
 
-    defect = Defect.query.filter(Defect.id == data["defect"]).first()
+    defect = Defect.query.get(data["defect"])
+    device = Defect.query.get(data["device"])
+
+    if not (defect and device):
+        abort(404)
+
     device = (
         Device.query.join(Location, Company, User)
         .filter(User.id == current_user, Device.id == data["device"])
         .first()
     )
 
-    if not (defect and device):
-        abort(400)
+    if not device:
+        abort(403)
 
     ticket = Ticket(device=device)
     occurrence = Occurrence(ticket=ticket, defect=defect)
@@ -92,8 +97,9 @@ def create_ticket():
 @enduser.route("/tickets/<int:ticket_id>/solutions", methods=["GET"])
 @jwt_required
 def solutions_for_ticket(ticket_id):
-    """Create a ticket for a specific device."""
+    """Get available solutions for current ticket."""
     solutions = Solution.query.all()
+    # @TODO: rank tickets.
     return SolutionSchema(many=True).jsonify(solutions)
 
 
@@ -115,6 +121,9 @@ def close_ticket(ticket_id):
         abort(400)
 
     if not Ticket.query.get(ticket_id):
+        abort(404)
+
+    if not Solution.query.get(data["solution"]):
         abort(404)
 
     ticket = (
